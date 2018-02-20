@@ -54,9 +54,6 @@ volumes:[
             stage ('BUILD: code compile and test') {
                 container('dotnetbuild') {
                     sh "dir"
-                    sh "git clone https://github.com/ukphillips/k8sapi.git"
-                    sh "cd k8sapi"
-                    sh "dir"
                     sh "dotnet build"
                 }
             }
