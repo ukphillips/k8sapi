@@ -22,7 +22,7 @@ volumes:[
             def repo = "ukphillips"
             def appMajorVersion = "1.0"
             def acrServer = "kriscontainers.azurecr.io"
-            def acrJenkinsCreds = "acr" //this is set in Jenkins global credentials
+            def acrJenkinsCreds = "ACR" //this is set in Jenkins global credentials
             sh 'git rev-parse HEAD > git_commit_id.txt'
             try {
                 env.GIT_COMMIT_ID = readFile('git_commit_id.txt').trim()
@@ -70,7 +70,7 @@ volumes:[
                     }
 
                     // build containers
-                    sh "cd k8sapi && docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage} ."                    
+                    sh "docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage} ."                    
 
                     // push images to repo (ACR)
                     def apiACRImage = acrServer + "/" + apiImage
