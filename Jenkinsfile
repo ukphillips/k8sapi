@@ -53,7 +53,6 @@ volumes:[
             println "DEBUG: code compile and test stage starting"
             stage ('BUILD: code compile and test') {
                 container('dotnetbuild') {
-                    sh "dir"
                     sh "dotnet build"
                 }
             }
