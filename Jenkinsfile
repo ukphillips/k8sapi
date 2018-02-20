@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 podTemplate(label: 'jenkins-pipeline', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
     containerTemplate(name: 'dotnetbuild', image: 'microsoft/aspnetcore-build:2.0', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'docker', image: 'docker:17.06.0', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'docker', image: 'docker:18.02.0', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.7.4', command: 'cat', ttyEnabled: true)
 ],
 volumes:[
