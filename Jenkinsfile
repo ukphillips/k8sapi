@@ -49,7 +49,6 @@ volumes:[
             println "DEBUG: buildDate ==> " + buildDate
             println "DEBUG: imageTag ==> " + imageTag
             println "DEBUG: apiImage ==> " + apiImage
-            println "DEBUG: webImage ==> " + webImage
 
             println "DEBUG: code compile and test stage starting"
             stage ('BUILD: code compile and test') {
@@ -82,11 +81,6 @@ volumes:[
                     sh "docker tag ${apiImage} ${apiACRImage}"
                     sh "docker push ${apiACRImage}"
                     println "DEBUG: pushed image ${apiACRImage}"
-                    def webACRImage = acrServer + "/" + webImage
-                    env.ENV_WEB_IMAGE = "${webACRImage}"
-                    sh "docker tag ${webImage} ${webACRImage}"
-                    sh "docker push ${webACRImage}"
-                    println "DEBUG: pushed image ${webACRImage}"
                 }
             }
 
@@ -96,7 +90,6 @@ volumes:[
                 container('kubectl') {
                     //sh "kubectl apply -f kube-jenkins.yaml"
                     sh "kubectl set image deployment/smackapi-deploy smackapi=${env.ENV_API_IMAGE} --namespace=default"
-                    sh "kubectl set image deployment/smackweb-deploy smackweb=${env.ENV_WEB_IMAGE} --namespace=default"
                 }
             }
         }
