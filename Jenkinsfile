@@ -37,8 +37,7 @@ volumes:[
             sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
             def buildDate = sdf.format(date)
             def appVersion = "${appMajorVersion}.${env.BUILD_NUMBER}"
-            def apiImage = "${repo}/smackapi:${imageTag}"
-            def webImage = "${repo}/smackweb:${imageTag}"
+            def apiImage = "${repo}:${imageTag}"
 
             // write out variables for debug purposes
             println "DEBUG: env.GIT_COMMIT_ID ==> ${env.GIT_COMMIT_ID}"
@@ -55,8 +54,10 @@ volumes:[
             println "DEBUG: code compile and test stage starting"
             stage ('BUILD: code compile and test') {
                 container('dotnetbuild') {
+                    sh "dir"
                     sh "git clone https://github.com/ukphillips/k8sapi.git"
                     sh "cd k8sapi"
+                    sh "dir"
                     sh "dotnet build"
                 }
             }
@@ -73,8 +74,7 @@ volumes:[
                     }
 
                     // build containers
-                    sh "cd smackapi && docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage} ."                    
-                    sh "cd smackweb && docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${webImage} ."
+                    sh "cd k8sapi && docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage} ."                    
 
                     // push images to repo (ACR)
                     def apiACRImage = acrServer + "/" + apiImage
