@@ -3,7 +3,7 @@ import java.text.SimpleDateFormat
 
 podTemplate(label: 'jenkins-pipeline', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
-    containerTemplate(name: 'golang', image: 'golang:1.7.5', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'dotnetbuild', image: 'microsoft/aspnetcore', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'docker', image: 'docker:17.06.0', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.7.4', command: 'cat', ttyEnabled: true)
 ],
@@ -54,12 +54,10 @@ volumes:[
 
             println "DEBUG: code compile and test stage starting"
             stage ('BUILD: code compile and test') {
-                container('golang') {
-                    sh "go get github.com/gorilla/mux"
-                    sh "cd smackapi && go build"
-                    sh "cd smackapi && go test -v"
-                    sh "cd smackweb && go build"
-                    sh "cd smackweb && go test -v"
+                container('dotnetbuild') {
+                    sh "git clone https://github.com/ukphillips/k8sapi.git"
+                    sh "cd k8sapi"
+                    sh "dotnet build"
                 }
             }
 
