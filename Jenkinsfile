@@ -69,7 +69,7 @@ volumes:[
                     }
 
                     // build containers
-                    sh "docker --version"
+                    sh "docker version"
                     sh "docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage} ."                    
 
                     // push images to repo (ACR)
