@@ -13,7 +13,7 @@ volumes:[
     {
         node ('jenkins-pipeline') {
             println "DEBUG: Pipeline starting"
-        
+            sh 'docker version'
             // grab repo from source control
             checkout scm
 
