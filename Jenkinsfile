@@ -4,11 +4,11 @@ import java.text.SimpleDateFormat
 podTemplate(label: 'jenkins-pipeline', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:latest', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
     containerTemplate(name: 'dotnetbuild', image: 'microsoft/aspnetcore-build:2.0', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'docker', image: 'docker:stable-dind', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'docker', image: 'docker:latest', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.7.4', command: 'cat', ttyEnabled: true)
 ],
 volumes:[
-    //hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
 ])
     {
         node ('jenkins-pipeline') {
