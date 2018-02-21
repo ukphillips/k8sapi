@@ -70,8 +70,14 @@ volumes:[
 
                     // build containers
        
-                    sh "docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage} ."                    
-
+                    sh "docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage}:build -f Dockerfile.build ."                    
+                    sh "docker create --name extract ${apiImage}:build"
+                    sh "docker cp extract:/app/out ./app"
+                    sh "docker rm -f extract"
+                    sh "docker build --no-cache -t ${apiImage} ."
+                    sh "rm ./app"
+                    
+                    
                     // push images to repo (ACR)
                     def apiACRImage = acrServer + "/" + apiImage
                     env.ENV_API_IMAGE = "${apiACRImage}"
