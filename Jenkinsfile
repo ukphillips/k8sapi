@@ -59,6 +59,7 @@ volumes:[
             stage ('BUILD: containerize and publish TO repository') {
                 println "DEBUG: build and push containers stage starting"
                 container('docker') {
+                    sh "docker version"
                     // Login to ACR
                     withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: acrJenkinsCreds,
                                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
@@ -68,7 +69,7 @@ volumes:[
                     }
 
                     // build containers
-                    sh "docker version"
+       
                     sh "docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage} ."                    
 
                     // push images to repo (ACR)
