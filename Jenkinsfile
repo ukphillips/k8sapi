@@ -21,7 +21,7 @@ volumes:[
             def repo = "ukphillips"
             def appMajorVersion = "1.0"
             def acrServer = "kriscontainers.azurecr.io"
-            def acrJenkinsCreds = "ACR" //this is set in Jenkins global credentials
+            def acrJenkinsCreds = "acr_creds" //this is set in Jenkins global credentials
             sh 'git rev-parse HEAD > git_commit_id.txt'
             try {
                 env.GIT_COMMIT_ID = readFile('git_commit_id.txt').trim()
