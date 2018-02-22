@@ -36,7 +36,7 @@ volumes:[
             sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
             def buildDate = sdf.format(date)
             def appVersion = "${appMajorVersion}.${env.BUILD_NUMBER}"
-            def apiImage = "${repo}:${imageTag}"
+            def apiImage = "${repo}/k8sapi:${imageTag}"
 
             // write out variables for debug purposes
             println "DEBUG: env.GIT_COMMIT_ID ==> ${env.GIT_COMMIT_ID}"
