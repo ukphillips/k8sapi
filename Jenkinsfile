@@ -73,8 +73,8 @@ volumes:[
                             println "DEBUG: env.VCS_REF ==> ${env.GIT_SHA}"
 
                     // build containers
-                    sh "docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage}build -f Dockerfile.build ."  
-                    //sh "docker build -t ${apiImage}build -f Dockerfile.build ."                    
+                    //sh "docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage}build -f Dockerfile.build ."  
+                    sh "docker build -t ${apiImage}build -f Dockerfile.build ."                    
                     sh "docker create --name extract ${apiImage}build"
                     sh "docker cp extract:/app/out ./app"
                     sh "docker rm -f extract"
