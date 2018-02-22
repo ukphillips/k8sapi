@@ -1,7 +1,7 @@
 kind: Deployment
 apiVersion: apps/v1beta1
 metadata:
-  name: k8sapi
+  name: k8sapi-deploy
 spec:
   replicas: 1
   template: 
