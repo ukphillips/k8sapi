@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 podTemplate(label: 'jenkins-pipeline', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:latest', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins', resourceRequestCpu: '200m', resourceLimitCpu: '200m', resourceRequestMemory: '256Mi', resourceLimitMemory: '256Mi'),
     containerTemplate(name: 'dotnetbuild', image: 'microsoft/aspnetcore-build:2.0', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'docker', image: 'docker:latest', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'docker', image: 'docker:17.06.0', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.7.4', command: 'cat', ttyEnabled: true)
 ],
 volumes:[
@@ -68,9 +68,13 @@ volumes:[
                         // optionally push to Docker Hub with a custom Jenkins env variable
                     }
 
+                          println "DEBUG: env.BUILD_DATE ==> ${buildDate}"
+                          println "DEBUG: env.VERSION ==> ${appVersion}"       
+                            println "DEBUG: env.VCS_REF ==> ${env.GIT_SHA}"
+
                     // build containers
-       
-                    sh "docker build -t ${apiImage}build -f Dockerfile.build ."                    
+                    sh "docker build --build-arg BUILD_DATE='${buildDate}' --build-arg VERSION=${appVersion} --build-arg VCS_REF=${env.GIT_SHA} -t ${apiImage}build -f Dockerfile.build ."  
+                    //sh "docker build -t ${apiImage}build -f Dockerfile.build ."                    
                     sh "docker create --name extract ${apiImage}build"
                     sh "docker cp extract:/app/out ./app"
                     sh "docker rm -f extract"
